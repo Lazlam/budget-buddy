@@ -1,0 +1,13 @@
+{
+  "name": "Budget",
+  "type": "object",
+  "properties": {
+    "category": {
+      "type": "string",
+      "enum": ["food","groceries","transport","entertainment","shopping","bills","rent","subscriptions","education","health","travel","other"]
+    },
+    "monthly_limit": { "type": "number" },
+    "month": { "type": "string" }
+  },
+  "required": ["category", "monthly_limit", "month"]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Transaction",
+  "type": "object",
+  "properties": {
+    "title": { "type": "string" },
+    "amount": { "type": "number" },
+    "type": { "type": "string", "enum": ["income", "expense"] },
+    "category": {
+      "type": "string",
+      "enum": ["salary","freelance","gifts","other_income","food","groceries","transport","entertainment","shopping","bills","rent","subscriptions","education","health","travel","other"]
+    },
+    "date": { "type": "string", "format": "date" },
+    "notes": { "type": "string" }
+  },
+  "required": ["title", "amount", "type", "category", "date"]
+}
