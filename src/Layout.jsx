@@ -43,13 +43,13 @@ export default function Layout({ children, currentPageName }) {
             return (
               <Link
                 key={item.page}
-                to={`/${item.page === 'Dashboard' ? '' : item.page.toLowerCase()}`} // Replaced missing createPageUrl function to prevent errors!
+                to={`/${item.page === 'Dashboard' ? '' : item.page.toLowerCase()}`}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive ? "bg-indigo-50 text-indigo-700" : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
                 <item.icon className={`w-5 h-5 ${isActive ? "text-indigo-600" : ""}`} />
-                {t(item.label)} {/* This will translate "Dashboard", "Budgets", etc. */}
+                {t(item.label)} 
               </Link>
             );
           })}
@@ -66,19 +66,13 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </aside>
 
-      {/* Mobile Header */}
+      {/* Mobile Header (Cleaned up!) */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
         <h1 className="text-lg font-bold text-gray-900"><span className="text-indigo-600">Budget</span>Buddy</h1>
         
-        <div className="flex items-center gap-2">
-          {/* Mobile Language Toggle */}
-          <Button variant="outline" size="sm" className="h-8 px-2" onClick={toggleLanguage}>
-             {i18n.language === 'en' ? '🇬🇷 ΕΛ' : '🇬🇧 EN'}
-          </Button>
-          <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2">
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2">
+          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
       </div>
 
       {/* Mobile Nav */}
@@ -100,6 +94,11 @@ export default function Layout({ children, currentPageName }) {
             })}
             
             <div className="pt-2 mt-2 border-t border-gray-100 flex flex-col gap-2">
+              {/* NEW MOBILE TOGGLE BUTTON */}
+              <Button variant="outline" className="w-full justify-center text-gray-700" onClick={() => { toggleLanguage(); setMobileOpen(false); }}>
+                 {i18n.language === 'en' ? '🇬🇷 Αλλαγή σε Ελληνικά' : '🇬🇧 Switch to English'}
+              </Button>
+              
               <Button variant="ghost" className="w-full justify-start text-gray-500 hover:text-red-500 hover:bg-red-50" onClick={handleLogout}>
                 <LogOut className="w-5 h-5 mr-3" />{t("logout_btn", "Sign Out")}
               </Button>
