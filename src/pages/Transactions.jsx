@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next'; // ADDED
 import { supabase } from "@/api/supabase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -12,6 +13,7 @@ import AddTransactionDialog from "@/components/transactions/AddTransactionDialog
 const formatCategory = (cat) => cat?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
 export default function Transactions() {
+  const { t } = useTranslation(); // ADDED
   const [showAdd, setShowAdd] = useState(false);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
@@ -62,31 +64,31 @@ export default function Transactions() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Transactions</h1>
-            <p className="text-gray-500 text-sm mt-1">{transactions.length} total transactions</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">{t("transactions_title", "Transactions")}</h1>
+            <p className="text-gray-500 text-sm mt-1">{transactions.length} {t("total_transactions", "total transactions")}</p>
           </div>
           <Button onClick={() => setShowAdd(true)} className="bg-indigo-600 hover:bg-indigo-700 rounded-xl gap-2 h-11">
-            <Plus className="w-4 h-4" />Add Transaction
+            <Plus className="w-4 h-4" />{t("add_transaction_btn", "Add Transaction")}
           </Button>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <Input placeholder="Search transactions..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10 rounded-xl" />
+            <Input placeholder={t("search_transactions", "Search transactions...")} value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10 rounded-xl" />
           </div>
           <Select value={typeFilter} onValueChange={setTypeFilter}>
             <SelectTrigger className="w-full sm:w-36 rounded-xl"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="income">Income</SelectItem>
-              <SelectItem value="expense">Expense</SelectItem>
+              <SelectItem value="all">{t("all_types", "All Types")}</SelectItem>
+              <SelectItem value="income">{t("type_income", "Income")}</SelectItem>
+              <SelectItem value="expense">{t("type_expense", "Expense")}</SelectItem>
             </SelectContent>
           </Select>
           <Select value={catFilter} onValueChange={setCatFilter}>
             <SelectTrigger className="w-full sm:w-44 rounded-xl"><SelectValue /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="all">{t("all_categories", "All Categories")}</SelectItem>
               {categories.map((c) => <SelectItem key={c} value={c}>{formatCategory(c)}</SelectItem>)}
             </SelectContent>
           </Select>
@@ -95,7 +97,7 @@ export default function Transactions() {
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
           <AnimatePresence>
             {filtered.length === 0 ? (
-              <div className="text-center py-16 text-gray-400 text-sm">No transactions found</div>
+              <div className="text-center py-16 text-gray-400 text-sm">{t("no_transactions", "No transactions found")}</div>
             ) : (
               filtered.map((tx, i) => (
                 <motion.div key={tx.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.02 }}

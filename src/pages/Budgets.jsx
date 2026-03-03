@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next'; // ADDED
 import { supabase } from "@/api/supabase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -8,6 +9,7 @@ import BudgetCard from "@/components/budget/BudgetCard";
 import SetBudgetDialog from "@/components/budget/SetBudgetDialog";
 
 export default function Budgets() {
+  const { t } = useTranslation(); // ADDED
   const [showAdd, setShowAdd] = useState(false);
   const queryClient = useQueryClient();
   const currentMonth = format(new Date(), "yyyy-MM");
@@ -62,21 +64,21 @@ export default function Budgets() {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Budgets</h1>
-            <p className="text-gray-500 text-sm mt-1">{format(new Date(), "MMMM yyyy")} limits</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">{t("budgets_title", "Budgets")}</h1>
+            <p className="text-gray-500 text-sm mt-1">{format(new Date(), "MMMM yyyy")} {t("limits_text", "limits")}</p>
           </div>
           <Button onClick={() => setShowAdd(true)} className="bg-indigo-600 hover:bg-indigo-700 rounded-xl gap-2 h-11">
-            <Plus className="w-4 h-4" />Set Budget
+            <Plus className="w-4 h-4" />{t("set_budget_btn", "Set Budget")}
           </Button>
         </div>
 
         {budgets.length > 0 && (
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div><p className="text-sm text-gray-500">Total Budgeted</p><p className="text-2xl font-bold text-gray-900">${totalBudget.toFixed(2)}</p></div>
-              <div><p className="text-sm text-gray-500">Total Spent</p><p className="text-2xl font-bold text-gray-900">${totalSpent.toFixed(2)}</p></div>
+              <div><p className="text-sm text-gray-500">{t("total_budgeted", "Total Budgeted")}</p><p className="text-2xl font-bold text-gray-900">${totalBudget.toFixed(2)}</p></div>
+              <div><p className="text-sm text-gray-500">{t("total_spent", "Total Spent")}</p><p className="text-2xl font-bold text-gray-900">${totalSpent.toFixed(2)}</p></div>
               <div>
-                <p className="text-sm text-gray-500">Remaining</p>
+                <p className="text-sm text-gray-500">{t("remaining", "Remaining")}</p>
                 <p className={`text-2xl font-bold ${totalBudget - totalSpent >= 0 ? "text-emerald-600" : "text-red-500"}`}>
                   ${(totalBudget - totalSpent).toFixed(2)}
                 </p>
@@ -87,9 +89,9 @@ export default function Budgets() {
 
         {budgets.length === 0 ? (
           <div className="bg-white rounded-2xl border border-gray-100 p-16 shadow-sm text-center">
-            <p className="text-gray-400 text-sm mb-4">No budgets set yet!</p>
+            <p className="text-gray-400 text-sm mb-4">{t("no_budgets", "No budgets set yet!")}</p>
             <Button onClick={() => setShowAdd(true)} variant="outline" className="rounded-xl gap-2">
-              <Plus className="w-4 h-4" />Set Your First Budget
+              <Plus className="w-4 h-4" />{t("set_first_budget_btn", "Set Your First Budget")}
             </Button>
           </div>
         ) : (

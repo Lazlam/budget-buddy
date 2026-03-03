@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next'; // ADDED
 import { supabase } from "@/api/supabase";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -10,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default function AIAdvisor() {
+  const { t } = useTranslation(); // ADDED
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -71,13 +73,18 @@ export default function AIAdvisor() {
       setMessages((prev) => [...prev, { role: "assistant", content: responseText }]);
     } catch (e) {
       console.error("Gemini Error:", e);
-      setMessages((prev) => [...prev, { role: "assistant", content: "Sorry, my AI brain is having trouble connecting right now! Check your API key." }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: t("ai_error", "Sorry, my AI brain is having trouble connecting right now! Check your API key.") }]);
     }
     
     setLoading(false);
   };
 
-  const quickPrompts = ["How am I doing this month?", "Where can I cut spending?", "Help me make a savings plan", "What should my budget be?"];
+  const quickPrompts = [
+    t("prompt_1", "How am I doing this month?"), 
+    t("prompt_2", "Where can I cut spending?"), 
+    t("prompt_3", "Help me make a savings plan"), 
+    t("prompt_4", "What should my budget be?")
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50/50">
@@ -88,8 +95,8 @@ export default function AIAdvisor() {
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">AI Money Advisor</h1>
-              <p className="text-sm text-gray-500">Ask anything about your finances</p>
+              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">{t("ai_advisor_title", "AI Money Advisor")}</h1>
+              <p className="text-sm text-gray-500">{t("ai_advisor_subtitle", "Ask anything about your finances")}</p>
             </div>
           </div>
         </div>
@@ -99,8 +106,8 @@ export default function AIAdvisor() {
             <div className="flex flex-col items-center justify-center h-full text-center gap-6">
               <div className="p-4 bg-indigo-50 rounded-2xl"><Bot className="w-10 h-10 text-indigo-500" /></div>
               <div>
-                <p className="text-gray-900 font-medium mb-1">Hi! I'm your AI Money Advisor</p>
-                <p className="text-sm text-gray-500 max-w-sm">I can analyze your spending, help you budget, and give personalized tips.</p>
+                <p className="text-gray-900 font-medium mb-1">{t("ai_greeting", "Hi! I'm your AI Money Advisor")}</p>
+                <p className="text-sm text-gray-500 max-w-sm">{t("ai_description", "I can analyze your spending, help you budget, and give personalized tips.")}</p>
               </div>
               <div className="flex flex-wrap justify-center gap-2">
                 {quickPrompts.map((prompt) => (
@@ -113,7 +120,6 @@ export default function AIAdvisor() {
             </div>
           )}
           
-          {/* FIX 1: Only the messages are in here now, with a highly unique key */}
           <AnimatePresence mode="popLayout">
             {messages.map((msg, i) => (
               <motion.div 
@@ -132,7 +138,7 @@ export default function AIAdvisor() {
                     <p className="text-sm">{msg.content}</p>
                   ) : (
                     <div className="text-sm whitespace-pre-wrap">
-                      {msg.content}
+                      <ReactMarkdown>{msg.content}</ReactMarkdown>
                     </div>
                   )}
                 </div>
@@ -145,7 +151,6 @@ export default function AIAdvisor() {
             ))}
           </AnimatePresence>
 
-          {/* FIX 2: Loading dots are OUTSIDE AnimatePresence */}
           {loading && (
             <motion.div 
               initial={{ opacity: 0 }} 
@@ -169,7 +174,7 @@ export default function AIAdvisor() {
         <div className="flex gap-3">
           <Input value={input} onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !loading && handleSend()}
-            placeholder="Ask about your spending, budget tips, savings goals..."
+            placeholder={t("ai_input_placeholder", "Ask about your spending, budget tips, savings goals...")}
             className="flex-1 h-12 rounded-xl" disabled={loading} />
           <Button onClick={handleSend} disabled={loading || !input.trim()} className="bg-indigo-600 hover:bg-indigo-700 rounded-xl h-12 w-12">
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}

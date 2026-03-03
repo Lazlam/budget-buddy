@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next'; // 1. Added translation hook
 import { supabase } from "@/api/supabase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -15,6 +16,8 @@ export default function Dashboard() {
   const [showAdd, setShowAdd] = useState(false);
   const queryClient = useQueryClient();
   const currentMonth = format(new Date(), "yyyy-MM");
+  
+  const { t } = useTranslation(); // 2. Initialized translation function
 
   const { data: transactions = [], isLoading } = useQuery({
     queryKey: ["transactions"],
@@ -56,36 +59,36 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Dashboard</h1>
-            <p className="text-gray-500 text-sm mt-1">{format(new Date(), "MMMM yyyy")} Overview</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">{t("dashboard_title", "Dashboard")}</h1>
+            <p className="text-gray-500 text-sm mt-1">{format(new Date(), "MMMM yyyy")} {t("overview_text", "Overview")}</p>
           </div>
           <Button onClick={() => setShowAdd(true)} className="bg-indigo-600 hover:bg-indigo-700 rounded-xl gap-2 h-11 shadow-sm">
-            <Plus className="w-4 h-4" />Add Transaction
+            <Plus className="w-4 h-4" />{t("add_transaction_btn", "Add Transaction")}
           </Button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <StatCard title="Income" value={`$${totalIncome.toFixed(2)}`} icon={TrendingUp} color="#10b981" />
-          <StatCard title="Expenses" value={`$${totalExpenses.toFixed(2)}`} icon={TrendingDown} color="#6366f1" />
-          <StatCard title="Balance" value={`$${balance.toFixed(2)}`} icon={Wallet}
+          <StatCard title={t("income_stat", "Income")} value={`$${totalIncome.toFixed(2)}`} icon={TrendingUp} color="#10b981" />
+          <StatCard title={t("expenses_stat", "Expenses")} value={`$${totalExpenses.toFixed(2)}`} icon={TrendingDown} color="#6366f1" />
+          <StatCard title={t("balance_stat", "Balance")} value={`$${balance.toFixed(2)}`} icon={Wallet}
             color={balance >= 0 ? "#10b981" : "#ef4444"}
-            subtitle={balance >= 0 ? "You're in the green!" : "Spending more than earning"} />
+            subtitle={balance >= 0 ? t("balance_positive", "You're in the green!") : t("balance_negative", "Spending more than earning")} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Where Your Money Goes</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t("where_money_goes", "Where Your Money Goes")}</h2>
             <SpendingChart transactions={monthTxs} />
           </div>
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Transactions</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t("recent_transactions", "Recent Transactions")}</h2>
             <RecentTransactions transactions={transactions} />
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Monthly Trend</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t("monthly_trend", "Monthly Trend")}</h2>
             <MonthlyTrend transactions={transactions} />
           </div>
           <AIInsightsPanel transactions={monthTxs} budgets={budgets} />
