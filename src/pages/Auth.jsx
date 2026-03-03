@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { supabase } from "@/api/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "../components/PasswordInput";
 import { Wallet, Loader2, Mail, Lock, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -97,8 +98,7 @@ export default function Auth() {
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Lock className="h-5 w-5 text-gray-400" />
                   </div>
-                  <Input 
-                    type="password" 
+                  <PasswordInput 
                     required 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
