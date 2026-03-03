@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { supabase } from "@/api/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,11 +9,18 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
-  const [view, setView] = useState("login"); // "login", "signup", or "forgot"
+  const [view, setView] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
+  const { t, i18n } = useTranslation();
+
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'el' : 'en';
+    i18n.changeLanguage(newLang);
+  };
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -22,21 +30,18 @@ export default function Auth() {
 
     try {
       if (view === "forgot") {
-        // Send the password reset email
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${window.location.origin}/update-password`,
         });
         if (error) throw error;
-        setSuccess("Reset link sent! Please check your email inbox.");
+        setSuccess(t("success_reset_link"));
       } else if (view === "login") {
-        // Log the user in
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       } else {
-        // Create a new account
         const { error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
-        setSuccess("Account created! Please check your email inbox for the confirmation link.");
+        setSuccess(t("success_account_created"));
       }
     } catch (err) {
       setError(err.message);
@@ -47,7 +52,16 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        
+        {/* NEW LANGUAGE TOGGLE BUTTON (Right above the logo) */}
+        <div className="flex justify-end mb-4 pr-4 sm:pr-0">
+          <Button variant="outline" size="sm" onClick={toggleLanguage} className="bg-white shadow-sm font-medium text-gray-700">
+            {i18n.language === 'en' ? '🇬🇷 ΕΛ' : '🇬🇧 EN'}
+          </Button>
+        </div>
+
         <div className="flex justify-center">
           <div className="p-3 bg-indigo-600 rounded-2xl shadow-lg">
             <Wallet className="w-8 h-8 text-white" />
@@ -57,9 +71,9 @@ export default function Auth() {
           BudgetBuddy
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          {view === "login" && "Welcome back! Please sign in."}
-          {view === "signup" && "Create your family account."}
-          {view === "forgot" && "Reset your password."}
+          {view === "login" && t("welcome_login")}
+          {view === "signup" && t("welcome_signup")}
+          {view === "forgot" && t("welcome_forgot")}
         </p>
       </div>
 
@@ -67,7 +81,7 @@ export default function Auth() {
         <div className="bg-white py-8 px-4 shadow-sm sm:rounded-2xl sm:px-10 border border-gray-100">
           <form className="space-y-6" onSubmit={handleAuth}>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Email address</label>
+              <label className="block text-sm font-medium text-gray-700">{t("email_label")}</label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="h-5 w-5 text-gray-400" />
@@ -83,14 +97,13 @@ export default function Auth() {
               </div>
             </div>
 
-            {/* Only show password field if we are NOT on the forgot password screen */}
             {view !== "forgot" && (
               <div>
                 <div className="flex items-center justify-between">
-                  <label className="block text-sm font-medium text-gray-700">Password</label>
+                  <label className="block text-sm font-medium text-gray-700">{t("password_label")}</label>
                   {view === "login" && (
                     <button type="button" onClick={() => { setView("forgot"); setError(null); setSuccess(null); }} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                      Forgot password?
+                      {t("forgot_password_link")}
                     </button>
                   )}
                 </div>
@@ -127,7 +140,7 @@ export default function Auth() {
 
             <Button type="submit" disabled={isLoading || success} className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 h-11">
               {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
-                view === "login" ? "Sign In" : view === "signup" ? "Sign Up" : "Send Reset Link"
+                view === "login" ? t("sign_in_btn") : view === "signup" ? t("sign_up_btn") : t("send_reset_link_btn")
               )}
             </Button>
           </form>
@@ -136,17 +149,17 @@ export default function Auth() {
             <div className="relative">
               <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or</span>
+                <span className="px-2 bg-white text-gray-500">{t("or_divider")}</span>
               </div>
             </div>
             <div className="mt-6 text-center">
               {view === "forgot" ? (
                 <button type="button" onClick={() => { setView("login"); setError(null); setSuccess(null); }} className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
-                  Back to Sign In
+                  {t("back_to_signin")}
                 </button>
               ) : (
                 <button type="button" onClick={() => { setView(view === "login" ? "signup" : "login"); setError(null); setSuccess(null); }} className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors">
-                  {view === "login" ? "Need an account? Sign up" : "Already have an account? Sign in"}
+                  {view === "login" ? t("need_account_signup") : t("already_have_account_signin")}
                 </button>
               )}
             </div>

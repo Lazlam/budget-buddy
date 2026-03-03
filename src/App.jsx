@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { supabase } from "@/api/supabase";
 import { Loader2 } from "lucide-react";
 import UpdatePassword from "./pages/UpdatePassword";
+import './index.css';
 
 // Import your pages
 import Layout from "./Layout";
