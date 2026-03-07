@@ -13,4 +13,17 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+
+  build: {
+    chunkSizeWarningLimit: 1500, // Raises the warning limit to 1.5 MB
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          charts: ['recharts', 'framer-motion'],
+          ai: ['@google/generative-ai']
+        }
+      }
+    }
+  }
 })
