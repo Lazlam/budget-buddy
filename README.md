@@ -4,7 +4,10 @@
 
 **[View Live Demo](https://budget-buddy-3b46.vercel.app)**
 
-*(Optional: Add a screenshot of your dashboard here using `![Dashboard Screenshot](./path-to-image.png)`)*
+
+
+**Dashboard Screenshot
+<img width="1918" height="866" alt="Screenshot 2026-03-07 134423" src="https://github.com/user-attachments/assets/e7364eb0-3029-45ce-a974-f51bdc1701b0" />**
 
 ## Key Features
 
@@ -60,3 +63,4 @@ src/pages/: Main dashboard, budget, transaction, and AI views.
 
 ---
 *Designed and built by Labros Lazarakis
+
