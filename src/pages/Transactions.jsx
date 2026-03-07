@@ -9,11 +9,13 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
 import AddTransactionDialog from "@/components/transactions/AddTransactionDialog";
+import { useCurrency } from "@/contexts/CurrencyContext"; // <-- ADDED
 
 const formatCategory = (cat) => cat?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
 export default function Transactions() {
   const { t } = useTranslation();
+  const { formatMoney } = useCurrency(); // <-- ADDED
   const [showAdd, setShowAdd] = useState(false);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
@@ -112,9 +114,9 @@ export default function Transactions() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    {/* Changed $ to € below */}
+                    {/* Replaced manual sign and symbol with formatMoney */}
                     <span className={`text-sm font-semibold ${tx.type === "income" ? "text-emerald-600" : "text-gray-900"}`}>
-                      {tx.type === "income" ? "+" : "-"}€{tx.amount.toFixed(2)}
+                      {tx.type === "income" ? "+" : "-"}{formatMoney(tx.amount)}
                     </span>
                     <Button variant="ghost" size="icon"
                       className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-red-500"

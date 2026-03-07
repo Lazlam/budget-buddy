@@ -1,4 +1,5 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const CATEGORY_COLORS = {
   food: "#f97316", groceries: "#22c55e", transport: "#3b82f6",
@@ -10,20 +11,25 @@ const CATEGORY_COLORS = {
 const formatCategory = (cat) => cat?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
 const CustomTooltip = ({ active, payload }) => {
+  const { formatMoney } = useCurrency();
+
   if (active && payload?.[0]) return (
     <div className="bg-white border border-gray-100 rounded-xl px-4 py-3 shadow-lg">
       <p className="text-sm font-semibold text-gray-900">{formatCategory(payload[0].name)}</p>
-      <p className="text-sm text-gray-500">€{payload[0].value.toFixed(2)}</p>
+      <p className="text-sm text-gray-500">{formatMoney(payload[0].value)}</p>
     </div>
   );
   return null;
 };
 
 export default function SpendingChart({ transactions }) {
+  const { formatMoney } = useCurrency(); // <-- ADDED
   const expensesByCategory = {};
+  
   transactions.filter((t) => t.type === "expense").forEach((t) => {
     expensesByCategory[t.category] = (expensesByCategory[t.category] || 0) + t.amount;
   });
+  
   const data = Object.entries(expensesByCategory).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
 
   if (data.length === 0) return (
@@ -49,7 +55,7 @@ export default function SpendingChart({ transactions }) {
               <div className="w-3 h-3 rounded-full" style={{ background: CATEGORY_COLORS[item.name] || "#6b7280" }} />
               <span className="text-sm text-gray-600">{formatCategory(item.name)}</span>
             </div>
-            <span className="text-sm font-semibold text-gray-900">€{item.value.toFixed(2)}</span>
+            <span className="text-sm font-semibold text-gray-900">{formatMoney(item.value)}</span> {/* <-- REPLACED HARDCODED € */}
           </div>
         ))}
       </div>

@@ -5,11 +5,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const CATEGORIES = ["food","groceries","transport","entertainment","shopping","bills","rent","subscriptions","education","health","travel","other"];
 const formatCategory = (cat) => cat?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
 export default function SetBudgetDialog({ open, onOpenChange, onSubmit, existingCategories }) {
+  const { currency } = useCurrency();
   const [form, setForm] = useState({ category: "", monthly_limit: "" });
   const [saving, setSaving] = useState(false);
   const available = CATEGORIES.filter((c) => !existingCategories.includes(c));
@@ -38,7 +40,7 @@ export default function SetBudgetDialog({ open, onOpenChange, onSubmit, existing
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Monthly Limit ($)</Label>
+            <Label>Monthly Limit ({currency})</Label>
             <Input type="number" step="1" min="1" placeholder="e.g. 200" value={form.monthly_limit} onChange={(e) => setForm({ ...form, monthly_limit: e.target.value })} required />
           </div>
           <Button type="submit" disabled={saving || !form.category} className="w-full bg-indigo-600 hover:bg-indigo-700 h-11 rounded-xl">

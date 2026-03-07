@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/api/supabase";
 import { LayoutDashboard, ArrowLeftRight, Target, Sparkles, Menu, X, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const NAV_ITEMS = [
   { label: "Dashboard", page: "Dashboard", icon: LayoutDashboard },
@@ -15,6 +16,7 @@ const NAV_ITEMS = [
 export default function Layout({ children, currentPageName }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { t, i18n } = useTranslation();
+  const { currency, setCurrency } = useCurrency();
 
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'el' : 'en';
@@ -57,6 +59,18 @@ export default function Layout({ children, currentPageName }) {
         
         {/* Desktop Bottom Actions: Toggle Language & Logout */}
         <div className="mt-auto flex flex-col gap-2 pt-4 border-t border-gray-100">
+          <select 
+            value={currency} 
+            onChange={(e) => setCurrency(e.target.value)}
+            className="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-xl px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+          >
+            <option value="EUR">🇪🇺 EUR (€)</option>
+            <option value="USD">🇺🇸 USD ($)</option>
+            <option value="GBP">🇬🇧 GBP (£)</option>
+            <option value="JPY">🇯🇵 JPY (¥)</option>
+            <option value="AUD">🇦🇺 AUD ($)</option>
+            <option value="CAD">🇨🇦 CAD ($)</option>
+          </select>
           <Button variant="outline" size="sm" onClick={toggleLanguage} className="w-full justify-center">
             {i18n.language === 'en' ? '🇬🇷 ΕΛ' : '🇬🇧 EN'}
           </Button>

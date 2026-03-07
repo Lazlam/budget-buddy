@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const CATEGORY_COLORS = {
   food: "#f97316", groceries: "#22c55e", transport: "#3b82f6",
@@ -6,9 +7,12 @@ const CATEGORY_COLORS = {
   rent: "#ef4444", subscriptions: "#6366f1", education: "#14b8a6",
   health: "#10b981", travel: "#8b5cf6", other: "#6b7280",
 };
+
 const formatCategory = (cat) => cat?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
 export default function BudgetCard({ budget, spent }) {
+  const { formatMoney } = useCurrency();
+  
   const percentage = budget.monthly_limit > 0 ? Math.min((spent / budget.monthly_limit) * 100, 100) : 0;
   const remaining = budget.monthly_limit - spent;
   const isOver = remaining < 0;
@@ -28,11 +32,11 @@ export default function BudgetCard({ budget, spent }) {
       </div>
       <div className="flex items-end justify-between mb-3">
         <div>
-          <span className="text-2xl font-bold text-gray-900">€{spent.toFixed(0)}</span>
-          <span className="text-sm text-gray-400 ml-1">/ €{budget.monthly_limit.toFixed(0)}</span>
+          <span className="text-2xl font-bold text-gray-900">{formatMoney(spent)}</span>
+          <span className="text-sm text-gray-400 ml-1">/ {formatMoney(budget.monthly_limit)}</span>
         </div>
         <span className={`text-sm font-medium ${isOver ? "text-red-500" : "text-gray-500"}`}>
-          {isOver ? `€${Math.abs(remaining).toFixed(0)} over` : `€${remaining.toFixed(0)} left`}
+          {isOver ? `${formatMoney(Math.abs(remaining))} over` : `${formatMoney(remaining)} left`}
         </span>
       </div>
       <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">

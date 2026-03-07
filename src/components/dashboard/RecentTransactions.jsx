@@ -1,14 +1,18 @@
 import { format } from "date-fns";
 import { ArrowUpRight, ArrowDownLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const formatCategory = (cat) => cat?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
 export default function RecentTransactions({ transactions }) {
+  const { formatMoney } = useCurrency();
   const recent = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 8);
+  
   if (recent.length === 0) return (
     <div className="flex items-center justify-center h-32 text-gray-400 text-sm">No transactions yet. Add your first one!</div>
   );
+
   return (
     <div className="space-y-1">
       {recent.map((tx, i) => (
@@ -24,7 +28,7 @@ export default function RecentTransactions({ transactions }) {
             </div>
           </div>
           <span className={`text-sm font-semibold ${tx.type === "income" ? "text-emerald-600" : "text-gray-900"}`}>
-            {tx.type === "income" ? "+" : "-"}€{tx.amount.toFixed(2)}
+            {tx.type === "income" ? "+" : "-"}{formatMoney(tx.amount)}
           </span>
         </motion.div>
       ))}

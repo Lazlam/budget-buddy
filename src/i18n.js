@@ -20,6 +20,8 @@ const resources = {
       "already_have_account_signin": "Already have an account? Sign in",
       "success_reset_link": "Reset link sent! Please check your email inbox.",
       "success_account_created": "Account created! Please check your email inbox for the confirmation link.",
+
+      
       
       // --- App Interface Translations (Layout & Sidebar) ---
       "dashboard_title": "Dashboard",
@@ -41,6 +43,9 @@ const resources = {
       "where_money_goes": "Where Your Money Goes",
       "recent_transactions": "Recent Transactions",
       "monthly_trend": "Monthly Trend",
+      "live_rates_title": "Live Exchange Rates",
+      "live_rates_subtitle": "Base: 1 Euro (€)",
+      "rates_error": "Could not load exchange rates.",
 
       // --- AI Advisor Translations ---
       "ai_advisor_title": "AI Money Advisor",
@@ -114,6 +119,9 @@ const resources = {
       "where_money_goes": "Πού Πάνε τα Χρήματά Σας",
       "recent_transactions": "Πρόσφατες Συναλλαγές",
       "monthly_trend": "Μηνιαία Τάση",
+      "live_rates_title": "Ζωντανές Συναλλαγματικές Ισοτιμίες",
+      "live_rates_subtitle": "Βάση: 1 Ευρώ (€)",
+      "rates_error": "Αδυναμία φόρτωσης ισοτιμιών.",
 
       // --- AI Advisor Translations ---
       "ai_advisor_title": "Σύμβουλος AI",

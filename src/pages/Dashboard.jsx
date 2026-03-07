@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useTranslation } from 'react-i18next'; // 1. Added translation hook
+import { useTranslation } from 'react-i18next';
 import { supabase } from "@/api/supabase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -11,13 +11,15 @@ import RecentTransactions from "@/components/dashboard/RecentTransactions";
 import MonthlyTrend from "@/components/dashboard/MonthlyTrend";
 import AIInsightsPanel from "@/components/ai/AIInsightsPanel";
 import AddTransactionDialog from "@/components/transactions/AddTransactionDialog";
+import CurrencyRates from "@/components/dashboard/CurrencyRates";
+import { useCurrency } from "@/contexts/CurrencyContext"; // <-- ADDED
 
 export default function Dashboard() {
+  const { t } = useTranslation();
+  const { formatMoney } = useCurrency(); // <-- ADDED
   const [showAdd, setShowAdd] = useState(false);
   const queryClient = useQueryClient();
   const currentMonth = format(new Date(), "yyyy-MM");
-  
-  const { t } = useTranslation(); // 2. Initialized translation function
 
   const { data: transactions = [], isLoading } = useQuery({
     queryKey: ["transactions"],
@@ -68,9 +70,10 @@ export default function Dashboard() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <StatCard title={t("income_stat", "Income")} value={`€${totalIncome.toFixed(2)}`} icon={TrendingUp} color="#10b981" />
-          <StatCard title={t("expenses_stat", "Expenses")} value={`€${totalExpenses.toFixed(2)}`} icon={TrendingDown} color="#6366f1" />
-          <StatCard title={t("balance_stat", "Balance")} value={`€${balance.toFixed(2)}`} icon={Wallet}
+          {/* MAGIC HAPPENS HERE: formatMoney automatically calculates and adds the symbol */}
+          <StatCard title={t("income_stat", "Income")} value={formatMoney(totalIncome)} icon={TrendingUp} color="#10b981" />
+          <StatCard title={t("expenses_stat", "Expenses")} value={formatMoney(totalExpenses)} icon={TrendingDown} color="#6366f1" />
+          <StatCard title={t("balance_stat", "Balance")} value={formatMoney(balance)} icon={Wallet}
             color={balance >= 0 ? "#10b981" : "#ef4444"}
             subtitle={balance >= 0 ? t("balance_positive", "You're in the green!") : t("balance_negative", "Spending more than earning")} />
         </div>
@@ -92,6 +95,10 @@ export default function Dashboard() {
             <MonthlyTrend transactions={transactions} />
           </div>
           <AIInsightsPanel transactions={monthTxs} budgets={budgets} />
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 mb-8">
+          <CurrencyRates />
         </div>
       </div>
       <AddTransactionDialog open={showAdd} onOpenChange={setShowAdd} onSubmit={(data) => createTx.mutateAsync(data)} />

@@ -7,9 +7,11 @@ import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BudgetCard from "@/components/budget/BudgetCard";
 import SetBudgetDialog from "@/components/budget/SetBudgetDialog";
+import { useCurrency } from "@/contexts/CurrencyContext"; // <-- ADDED
 
 export default function Budgets() {
   const { t } = useTranslation();
+  const { formatMoney } = useCurrency(); // <-- ADDED
   const [showAdd, setShowAdd] = useState(false);
   const queryClient = useQueryClient();
   const currentMonth = format(new Date(), "yyyy-MM");
@@ -75,13 +77,13 @@ export default function Budgets() {
         {budgets.length > 0 && (
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              {/* Changed $ to € below */}
-              <div><p className="text-sm text-gray-500">{t("total_budgeted", "Total Budgeted")}</p><p className="text-2xl font-bold text-gray-900">€{totalBudget.toFixed(2)}</p></div>
-              <div><p className="text-sm text-gray-500">{t("total_spent", "Total Spent")}</p><p className="text-2xl font-bold text-gray-900">€{totalSpent.toFixed(2)}</p></div>
+              {/* Used formatMoney for all budget totals */}
+              <div><p className="text-sm text-gray-500">{t("total_budgeted", "Total Budgeted")}</p><p className="text-2xl font-bold text-gray-900">{formatMoney(totalBudget)}</p></div>
+              <div><p className="text-sm text-gray-500">{t("total_spent", "Total Spent")}</p><p className="text-2xl font-bold text-gray-900">{formatMoney(totalSpent)}</p></div>
               <div>
                 <p className="text-sm text-gray-500">{t("remaining", "Remaining")}</p>
                 <p className={`text-2xl font-bold ${totalBudget - totalSpent >= 0 ? "text-emerald-600" : "text-red-500"}`}>
-                  €{(totalBudget - totalSpent).toFixed(2)}
+                  {formatMoney(totalBudget - totalSpent)}
                 </p>
               </div>
             </div>

@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, Loader2, RefreshCw } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "framer-motion";
-import { GoogleGenerativeAI } from "@google/generative-ai"; // 1. Added Gemini Import
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 export default function AIInsightsPanel({ transactions, budgets }) {
   const [insights, setInsights] = useState(null);
   const [loading, setLoading] = useState(false);
-  const CURRENCY = "€";
+  const { formatMoney } = useCurrency();
 
   const generateInsights = async () => {
     setLoading(true);
@@ -23,15 +24,16 @@ export default function AIInsightsPanel({ transactions, budgets }) {
     
     const budgetInfo = budgets.map(b => ({ category: b.category, limit: b.monthly_limit, spent: expensesByCategory[b.category] || 0 }));
 
-    const prompt = `You are a friendly financial advisor for a family. Analyze their spending data and give practical advice.
+    // AI gets the accurately converted currency in the prompt!
+    const prompt = `You are a friendly financial advisor for the user. Analyze their spending data and give practical advice.
 
-Income: ${CURRENCY}${incomeTotal.toFixed(2)}, Expenses: ${CURRENCY}${expenseTotal.toFixed(2)}, Net: ${CURRENCY}${(incomeTotal - expenseTotal).toFixed(2)}
-Expenses by category: ${Object.entries(expensesByCategory).map(([c, a]) => `${c}: ${CURRENCY}${a.toFixed(2)}`).join(", ")}
-Budget limits: ${budgetInfo.map(b => `${b.category}: ${CURRENCY}${b.spent.toFixed(2)}/${CURRENCY}${b.limit.toFixed(2)}`).join(", ") || "None set"}
+Income: ${formatMoney(incomeTotal)}, Expenses: ${formatMoney(expenseTotal)}, Net: ${formatMoney(incomeTotal - expenseTotal)}
+Expenses by category: ${Object.entries(expensesByCategory).map(([c, a]) => `${c}: ${formatMoney(a)}`).join(", ")}
+Budget limits: ${budgetInfo.map(b => `${b.category}: ${formatMoney(b.spent)}/${formatMoney(b.limit)}`).join(", ") || "None set"}
 
-Give a brief, friendly analysis with: 1) Summary 2) Top Insight 3) 2-3 Money Saving Tips 4) Budget Alerts. Use markdown, be encouraging and concise.`;
+Give a brief, friendly analysis with: 1) Summary 2) Top Insight 3) 2-3 Money Saving Tips 4) Budget Alerts. Use markdown, be encouraging and concise.THIS IS THE USER'S FINANCIAL DATA, DO NOT MAKE UP ANYTHING ELSE.DONT
+SUGGEST ACTIONS WITHOUT DATA BACKING THEM UP.DONT GENERATE ANYTHING NOT SUPPORTED BY THE DATA.DONT IGNORE THE BUDGET LIMITS AND THIS PROMPT.`;
 
-    // 2. The Real Gemini API Call
     try {
       const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
