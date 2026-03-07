@@ -28,6 +28,7 @@ export default function Auth() {
     setError(null);
     setSuccess(null);
 
+    // Handle login, signup, and password reset based on current view
     try {
       if (view === "forgot") {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -55,7 +56,7 @@ export default function Auth() {
       
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         
-        {/* NEW LANGUAGE TOGGLE BUTTON (Right above the logo) */}
+        {/* Add language toggle */}
         <div className="flex justify-end mb-4 pr-4 sm:pr-0">
           <Button variant="outline" size="sm" onClick={toggleLanguage} className="bg-white shadow-sm font-medium text-gray-700">
             {i18n.language === 'en' ? '🇬🇷 ΕΛ' : '🇬🇧 EN'}
@@ -76,7 +77,7 @@ export default function Auth() {
           {view === "forgot" && t("welcome_forgot")}
         </p>
       </div>
-
+      
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow-sm sm:rounded-2xl sm:px-10 border border-gray-100">
           <form className="space-y-6" onSubmit={handleAuth}>
@@ -96,7 +97,8 @@ export default function Auth() {
                 />
               </div>
             </div>
-
+            
+            {/* Show password field for login and signup views, hide for forgot password */}
             {view !== "forgot" && (
               <div>
                 <div className="flex items-center justify-between">
@@ -121,7 +123,7 @@ export default function Auth() {
                 </div>
               </div>
             )}
-
+            {/* Show error/success messages with animation */}
             <AnimatePresence>
               {error && (
                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
@@ -137,14 +139,14 @@ export default function Auth() {
                 </motion.div>
               )}
             </AnimatePresence>
-
+            
             <Button type="submit" disabled={isLoading || success} className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 h-11">
               {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
                 view === "login" ? t("sign_in_btn") : view === "signup" ? t("sign_up_btn") : t("send_reset_link_btn")
               )}
             </Button>
           </form>
-
+              
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>

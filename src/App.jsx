@@ -44,12 +44,12 @@ export default function App() {
     );
   }
 
-  // THE SECURITY GUARD: If no session, force them to the login screen!
+  // If no session, force them to the login screen!
   if (!session) {
     return <Auth />;
   }
 
-  // IF LOGGED IN: Open the doors to the normal app!
+  // Open the doors to the normal app
   return (
     <Routes>
       <Route path="/update-password" element={<UpdatePassword />} />

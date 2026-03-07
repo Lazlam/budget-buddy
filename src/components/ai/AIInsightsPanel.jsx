@@ -7,17 +7,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
+// This component generates AI insights based on user's transactions and budgets
 export default function AIInsightsPanel({ transactions, budgets }) {
   const [insights, setInsights] = useState(null);
   const [loading, setLoading] = useState(false);
   const { formatMoney } = useCurrency();
 
+  // Function to generate AI insights using Gemini API based on user's financial data
   const generateInsights = async () => {
     setLoading(true);
     const expensesByCategory = {};
     const incomeTotal = transactions.filter(t => t.type === "income").reduce((s, t) => s + (t.amount || 0), 0);
     const expenseTotal = transactions.filter(t => t.type === "expense").reduce((s, t) => s + (t.amount || 0), 0);
     
+    // Calculate total expenses by category for AI context
     transactions.filter(t => t.type === "expense").forEach(t => {
       expensesByCategory[t.category] = (expensesByCategory[t.category] || 0) + (t.amount || 0);
     });
@@ -26,13 +29,11 @@ export default function AIInsightsPanel({ transactions, budgets }) {
 
     // AI gets the accurately converted currency in the prompt!
     const prompt = `You are a friendly financial advisor for the user. Analyze their spending data and give practical advice.
-
-Income: ${formatMoney(incomeTotal)}, Expenses: ${formatMoney(expenseTotal)}, Net: ${formatMoney(incomeTotal - expenseTotal)}
-Expenses by category: ${Object.entries(expensesByCategory).map(([c, a]) => `${c}: ${formatMoney(a)}`).join(", ")}
-Budget limits: ${budgetInfo.map(b => `${b.category}: ${formatMoney(b.spent)}/${formatMoney(b.limit)}`).join(", ") || "None set"}
-
-Give a brief, friendly analysis with: 1) Summary 2) Top Insight 3) 2-3 Money Saving Tips 4) Budget Alerts. Use markdown, be encouraging and concise.THIS IS THE USER'S FINANCIAL DATA, DO NOT MAKE UP ANYTHING ELSE.DONT
-SUGGEST ACTIONS WITHOUT DATA BACKING THEM UP.DONT GENERATE ANYTHING NOT SUPPORTED BY THE DATA.DONT IGNORE THE BUDGET LIMITS AND THIS PROMPT.`;
+    Income: ${formatMoney(incomeTotal)}, Expenses: ${formatMoney(expenseTotal)}, Net: ${formatMoney(incomeTotal - expenseTotal)}
+    Expenses by category: ${Object.entries(expensesByCategory).map(([c, a]) => `${c}: ${formatMoney(a)}`).join(", ")}
+    Budget limits: ${budgetInfo.map(b => `${b.category}: ${formatMoney(b.spent)}/${formatMoney(b.limit)}`).join(", ") || "None set"}
+    Give a brief, friendly analysis with: 1) Summary 2) Top Insight 3) 2-3 Money Saving Tips 4) Budget Alerts. Use markdown, be encouraging and concise.THIS IS THE USER'S FINANCIAL DATA, DO NOT MAKE UP ANYTHING ELSE.DONT
+    SUGGEST ACTIONS WITHOUT DATA BACKING THEM UP.DONT GENERATE ANYTHING NOT SUPPORTED BY THE DATA.DONT IGNORE THE BUDGET LIMITS AND THIS PROMPT.`;
 
     try {
       const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
@@ -81,6 +82,7 @@ SUGGEST ACTIONS WITHOUT DATA BACKING THEM UP.DONT GENERATE ANYTHING NOT SUPPORTE
             <p className="text-sm text-gray-500">Analyzing your finances...</p>
           </motion.div>
         )}
+        {/* Show AI insights with markdown formatting once loaded */}
         {insights && !loading && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
             <div className="prose prose-sm prose-indigo max-w-none bg-white rounded-xl p-5 border border-indigo-100">

@@ -9,19 +9,20 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
 import AddTransactionDialog from "@/components/transactions/AddTransactionDialog";
-import { useCurrency } from "@/contexts/CurrencyContext"; // <-- ADDED
+import { useCurrency } from "@/contexts/CurrencyContext"; 
 
 const formatCategory = (cat) => cat?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
 export default function Transactions() {
   const { t } = useTranslation();
-  const { formatMoney } = useCurrency(); // <-- ADDED
+  const { formatMoney } = useCurrency(); 
   const [showAdd, setShowAdd] = useState(false);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [catFilter, setCatFilter] = useState("all");
   const queryClient = useQueryClient();
 
+  // Fetch transactions from Supabase, ordered by date descending
   const { data: transactions = [], isLoading } = useQuery({
     queryKey: ["transactions"],
     queryFn: async () => {
@@ -30,6 +31,7 @@ export default function Transactions() {
     },
   });
 
+  // Mutation to create a new transaction, then refresh transactions list
   const createTx = useMutation({
     mutationFn: async (data) => {
       const { error } = await supabase.from("transactions").insert([data]);
@@ -38,6 +40,7 @@ export default function Transactions() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["transactions"] }),
   });
 
+  // Mutation to delete a transaction by ID, then refresh transactions list
   const deleteTx = useMutation({
     mutationFn: async (id) => {
       const { error } = await supabase.from("transactions").delete().eq("id", id);
@@ -45,7 +48,8 @@ export default function Transactions() {
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["transactions"] }),
   });
-
+  
+  // Filter transactions based on search query, type filter, and category filter
   const filtered = transactions.filter((t) => {
     const matchSearch = t.title?.toLowerCase().includes(search.toLowerCase());
     const matchType = typeFilter === "all" || t.type === typeFilter;
@@ -60,7 +64,7 @@ export default function Transactions() {
       <div className="w-8 h-8 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
     </div>
   );
-
+  // Main page layout
   return (
     <div className="min-h-screen bg-gray-50/50">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
@@ -73,7 +77,7 @@ export default function Transactions() {
             <Plus className="w-4 h-4" />{t("add_transaction_btn", "Add Transaction")}
           </Button>
         </div>
-
+        
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -95,7 +99,7 @@ export default function Transactions() {
             </SelectContent>
           </Select>
         </div>
-
+        {/* List of transactions with animation on load */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
           <AnimatePresence>
             {filtered.length === 0 ? (

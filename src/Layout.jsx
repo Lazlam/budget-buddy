@@ -80,7 +80,7 @@ export default function Layout({ children, currentPageName }) {
         </div>
       </aside>
 
-      {/* Mobile Header (Cleaned up!) */}
+      {/* Mobile Header */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
         <h1 className="text-lg font-bold text-gray-900"><span className="text-indigo-600">Budget</span>Buddy</h1>
         
@@ -108,7 +108,7 @@ export default function Layout({ children, currentPageName }) {
             })}
             
             <div className="pt-2 mt-2 border-t border-gray-100 flex flex-col gap-2">
-              {/* NEW MOBILE TOGGLE BUTTON */}
+              {/* Mobile Toggle Button */}
               <Button variant="outline" className="w-full justify-center text-gray-700" onClick={() => { toggleLanguage(); setMobileOpen(false); }}>
                  {i18n.language === 'en' ? '🇬🇷 Αλλαγή σε Ελληνικά' : '🇬🇧 Switch to English'}
               </Button>

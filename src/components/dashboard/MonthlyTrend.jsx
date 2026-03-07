@@ -4,7 +4,7 @@ import { useCurrency } from "@/contexts/CurrencyContext";
 
 const CustomTooltip = ({ active, payload, label }) => {
   const { formatMoney } = useCurrency();
-
+  // Tooltip amounts in monthly trend chart
   if (active && payload?.length) return (
     <div className="bg-white border border-gray-100 rounded-xl px-4 py-3 shadow-lg">
       <p className="text-xs font-medium text-gray-500 mb-1">{label}</p>

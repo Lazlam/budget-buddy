@@ -9,16 +9,17 @@ import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
 import { motion, AnimatePresence } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { useCurrency } from "@/contexts/CurrencyContext"; // <-- ADDED
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 export default function AIAdvisor() {
   const { t } = useTranslation();
-  const { formatMoney } = useCurrency(); // <-- ADDED
+  const { formatMoney } = useCurrency();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const currentMonth = format(new Date(), "yyyy-MM");
 
+  // Fetch transactions and budgets to build AI context
   const { data: transactions = [] } = useQuery({
     queryKey: ["transactions"],
     queryFn: async () => {
@@ -35,6 +36,7 @@ export default function AIAdvisor() {
     },
   });
 
+  // Build AI context based on user's financial data
   const buildContext = () => {
     const monthTxs = transactions.filter((t) => t.date?.startsWith(currentMonth));
     const income = monthTxs.filter((t) => t.type === "income").reduce((s, t) => s + (t.amount || 0), 0);
@@ -54,13 +56,15 @@ export default function AIAdvisor() {
 - Recent transactions: ${monthTxs.slice(0, 15).map((t) => `${t.title}(${formatMoney(t.amount)}, ${t.type}, ${t.category})`).join("; ")}`;
   };
 
+  // Handle sending user message and getting AI response
   const handleSend = async () => {
     if (!input.trim()) return;
     const userMsg = input.trim();
     setInput("");
     setMessages((prev) => [...prev, { role: "user", content: userMsg }]);
     setLoading(true);
-
+    
+    // Build prompt with financial context and user question, then call Gemini API
     try {
       const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
@@ -83,6 +87,7 @@ export default function AIAdvisor() {
     setLoading(false);
   };
 
+  //Have a couple of quick prompts ready for user
   const quickPrompts = [
     t("prompt_1", "How am I doing this month?"), 
     t("prompt_2", "Where can I cut spending?"), 
@@ -90,6 +95,7 @@ export default function AIAdvisor() {
     t("prompt_4", "What should my budget be?")
   ];
 
+  // Main page layout
   return (
     <div className="min-h-screen bg-gray-50/50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 flex flex-col" style={{ height: "calc(100vh - 80px)" }}>
@@ -105,6 +111,7 @@ export default function AIAdvisor() {
           </div>
         </div>
 
+        {/* Chat messages area */}
         <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-1">
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full text-center gap-6">
@@ -113,6 +120,8 @@ export default function AIAdvisor() {
                 <p className="text-gray-900 font-medium mb-1">{t("ai_greeting", "Hi! I'm your AI Money Advisor")}</p>
                 <p className="text-sm text-gray-500 max-w-sm">{t("ai_description", "I can analyze your spending, help you budget, and give personalized tips.")}</p>
               </div>
+
+              {/* Quick prompt buttons for user to get started */}
               <div className="flex flex-wrap justify-center gap-2">
                 {quickPrompts.map((prompt) => (
                   <button key={prompt} onClick={() => setInput(prompt)}
@@ -154,13 +163,14 @@ export default function AIAdvisor() {
               </motion.div>
             ))}
           </AnimatePresence>
-
+          
           {loading && (
             <motion.div 
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
               className="flex gap-3 items-start"
             >
+              
               <div className="w-8 h-8 rounded-xl bg-indigo-100 flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-indigo-600" />
               </div>
@@ -174,7 +184,7 @@ export default function AIAdvisor() {
             </motion.div>
           )}
         </div>
-
+        {/* Input area */}
         <div className="flex gap-3">
           <Input value={input} onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !loading && handleSend()}
