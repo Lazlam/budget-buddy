@@ -28,11 +28,11 @@ export default function BudgetCard({ budget, spent }) {
       </div>
       <div className="flex items-end justify-between mb-3">
         <div>
-          <span className="text-2xl font-bold text-gray-900">${spent.toFixed(0)}</span>
-          <span className="text-sm text-gray-400 ml-1">/ ${budget.monthly_limit.toFixed(0)}</span>
+          <span className="text-2xl font-bold text-gray-900">€{spent.toFixed(0)}</span>
+          <span className="text-sm text-gray-400 ml-1">/ €{budget.monthly_limit.toFixed(0)}</span>
         </div>
         <span className={`text-sm font-medium ${isOver ? "text-red-500" : "text-gray-500"}`}>
-          {isOver ? `-$${Math.abs(remaining).toFixed(0)} over` : `$${remaining.toFixed(0)} left`}
+          {isOver ? `€${Math.abs(remaining).toFixed(0)} over` : `€${remaining.toFixed(0)} left`}
         </span>
       </div>
       <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">

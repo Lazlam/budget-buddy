@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useTranslation } from 'react-i18next'; // ADDED
+import { useTranslation } from 'react-i18next';
 import { supabase } from "@/api/supabase";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -13,7 +13,7 @@ import AddTransactionDialog from "@/components/transactions/AddTransactionDialog
 const formatCategory = (cat) => cat?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
 export default function Transactions() {
-  const { t } = useTranslation(); // ADDED
+  const { t } = useTranslation();
   const [showAdd, setShowAdd] = useState(false);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
@@ -112,8 +112,9 @@ export default function Transactions() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
+                    {/* Changed $ to € below */}
                     <span className={`text-sm font-semibold ${tx.type === "income" ? "text-emerald-600" : "text-gray-900"}`}>
-                      {tx.type === "income" ? "+" : "-"}${tx.amount.toFixed(2)}
+                      {tx.type === "income" ? "+" : "-"}€{tx.amount.toFixed(2)}
                     </span>
                     <Button variant="ghost" size="icon"
                       className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-red-500"

@@ -33,6 +33,8 @@ export default function AIAdvisor() {
     },
   });
 
+  const CURRENCY = "€";
+
   const buildContext = () => {
     const monthTxs = transactions.filter((t) => t.date?.startsWith(currentMonth));
     const income = monthTxs.filter((t) => t.type === "income").reduce((s, t) => s + (t.amount || 0), 0);
@@ -42,12 +44,12 @@ export default function AIAdvisor() {
       byCategory[t.category] = (byCategory[t.category] || 0) + (t.amount || 0);
     });
     return `User's Financial Data (${format(new Date(), "MMMM yyyy")}):
-- Income: $${income.toFixed(2)}
-- Expenses: $${expenses.toFixed(2)}
-- Balance: $${(income - expenses).toFixed(2)}
-- Expenses by category: ${Object.entries(byCategory).map(([c, a]) => `${c}: $${a.toFixed(2)}`).join(", ")}
-- Budget limits: ${budgets.map((b) => `${b.category}: $${b.monthly_limit}`).join(", ") || "None set"}
-- Recent transactions: ${monthTxs.slice(0, 15).map((t) => `${t.title}($${t.amount},${t.type},${t.category})`).join("; ")}`;
+- Income: ${CURRENCY}${income.toFixed(2)}
+- Expenses: ${CURRENCY}${expenses.toFixed(2)}
+- Balance: ${CURRENCY}${(income - expenses).toFixed(2)}
+- Expenses by category: ${Object.entries(byCategory).map(([c, a]) => `${c}: ${CURRENCY}${a.toFixed(2)}`).join(", ")}
+- Budget limits: ${budgets.map((b) => `${b.category}: ${CURRENCY}${b.monthly_limit}`).join(", ") || "None set"}
+- Recent transactions: ${monthTxs.slice(0, 15).map((t) => `${t.title}(${CURRENCY}${t.amount},${t.type},${t.category})`).join("; ")}`;
   };
 
   const handleSend = async () => {

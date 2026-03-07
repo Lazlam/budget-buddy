@@ -68,9 +68,9 @@ export default function Dashboard() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <StatCard title={t("income_stat", "Income")} value={`$${totalIncome.toFixed(2)}`} icon={TrendingUp} color="#10b981" />
-          <StatCard title={t("expenses_stat", "Expenses")} value={`$${totalExpenses.toFixed(2)}`} icon={TrendingDown} color="#6366f1" />
-          <StatCard title={t("balance_stat", "Balance")} value={`$${balance.toFixed(2)}`} icon={Wallet}
+          <StatCard title={t("income_stat", "Income")} value={`€${totalIncome.toFixed(2)}`} icon={TrendingUp} color="#10b981" />
+          <StatCard title={t("expenses_stat", "Expenses")} value={`€${totalExpenses.toFixed(2)}`} icon={TrendingDown} color="#6366f1" />
+          <StatCard title={t("balance_stat", "Balance")} value={`€${balance.toFixed(2)}`} icon={Wallet}
             color={balance >= 0 ? "#10b981" : "#ef4444"}
             subtitle={balance >= 0 ? t("balance_positive", "You're in the green!") : t("balance_negative", "Spending more than earning")} />
         </div>

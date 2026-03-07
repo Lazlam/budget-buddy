@@ -9,6 +9,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai"; // 1. Added Gemini I
 export default function AIInsightsPanel({ transactions, budgets }) {
   const [insights, setInsights] = useState(null);
   const [loading, setLoading] = useState(false);
+  const CURRENCY = "€";
 
   const generateInsights = async () => {
     setLoading(true);
@@ -24,9 +25,9 @@ export default function AIInsightsPanel({ transactions, budgets }) {
 
     const prompt = `You are a friendly financial advisor for a family. Analyze their spending data and give practical advice.
 
-Income: $${incomeTotal.toFixed(2)}, Expenses: $${expenseTotal.toFixed(2)}, Net: $${(incomeTotal - expenseTotal).toFixed(2)}
-Expenses by category: ${Object.entries(expensesByCategory).map(([c, a]) => `${c}: $${a.toFixed(2)}`).join(", ")}
-Budget limits: ${budgetInfo.map(b => `${b.category}: $${b.spent.toFixed(2)}/$${b.limit.toFixed(2)}`).join(", ") || "None set"}
+Income: ${CURRENCY}${incomeTotal.toFixed(2)}, Expenses: ${CURRENCY}${expenseTotal.toFixed(2)}, Net: ${CURRENCY}${(incomeTotal - expenseTotal).toFixed(2)}
+Expenses by category: ${Object.entries(expensesByCategory).map(([c, a]) => `${c}: ${CURRENCY}${a.toFixed(2)}`).join(", ")}
+Budget limits: ${budgetInfo.map(b => `${b.category}: ${CURRENCY}${b.spent.toFixed(2)}/${CURRENCY}${b.limit.toFixed(2)}`).join(", ") || "None set"}
 
 Give a brief, friendly analysis with: 1) Summary 2) Top Insight 3) 2-3 Money Saving Tips 4) Budget Alerts. Use markdown, be encouraging and concise.`;
 

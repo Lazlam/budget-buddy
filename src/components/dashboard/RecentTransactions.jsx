@@ -24,7 +24,7 @@ export default function RecentTransactions({ transactions }) {
             </div>
           </div>
           <span className={`text-sm font-semibold ${tx.type === "income" ? "text-emerald-600" : "text-gray-900"}`}>
-            {tx.type === "income" ? "+" : "-"}${tx.amount.toFixed(2)}
+            {tx.type === "income" ? "+" : "-"}€{tx.amount.toFixed(2)}
           </span>
         </motion.div>
       ))}
