@@ -2,7 +2,7 @@
 
 **Budget Buddy** is a modern, responsive, and fully localized personal finance dashboard. It empowers users to track their expenses, set visual budgets, and get personalized financial advice using real-time AI and live global exchange rates.
 
-[https://vercel.com/lazlams-projects/budget-buddy-3b46/BNcqNdwHGRQAVri8KjNqwkuyoyjk](https://budget-buddy-3b46.vercel.app)
+[[https://vercel.com/lazlams-projects/budget-buddy-3b46/BNcqNdwHGRQAVri8KjNqwkuyoyjk](https://budget-buddy-3b46.vercel.app)](https://budget-buddy-3b46.vercel.app)
 
 ##  Key Features
 
@@ -59,3 +59,4 @@ npm run dev
 
 ---
 *Designed and built by Labros Lazarakis*
+
