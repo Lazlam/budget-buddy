@@ -2,12 +2,13 @@
 
 **Budget Buddy** is a modern, responsive, and fully localized personal finance dashboard. It empowers users to track their expenses, set visual budgets, and get personalized financial advice using real-time AI and live global exchange rates.
 
-**[View Live Demo](https://budget-buddy-3b46.vercel.app)**
+**[View Live Demo](https://budget-buddy-three-mocha.vercel.app)**
 
 
 
-**Dashboard Screenshot
-<img width="1918" height="866" alt="Screenshot 2026-03-07 134423" src="https://github.com/user-attachments/assets/e7364eb0-3029-45ce-a974-f51bdc1701b0" />**
+**Dashboard Screenshot**
+<img width="1902" height="860" alt="Screenshot 2026-03-09 170410" src="https://github.com/user-attachments/assets/3022cfac-82bf-436b-bcfe-d80e8cd69a6f" />
+
 
 ## Key Features
 
@@ -63,4 +64,5 @@ src/pages/: Main dashboard, budget, transaction, and AI views.
 
 ---
 *Designed and built by Labros Lazarakis
+
 
