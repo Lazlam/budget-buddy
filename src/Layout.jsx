@@ -28,13 +28,14 @@ export default function Layout({ children, currentPageName }) {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50/50">
+    // Added dark background to main wrapper
+    <div className="flex min-h-screen bg-gray-50/50 dark:bg-gray-900 transition-colors duration-200">
       
       {/* Sidebar - Desktop */}
-      <aside className="hidden md:flex flex-col w-64 bg-white border-r border-gray-100 p-6 sticky top-0 h-screen">
+      <aside className="hidden md:flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-100 dark:border-gray-700 p-6 sticky top-0 h-screen transition-colors duration-200">
         <div className="mb-10">
-          <h1 className="text-xl font-bold text-gray-900 tracking-tight">
-            <span className="text-indigo-600">Budget</span>Buddy
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+            <span className="text-indigo-600 dark:text-indigo-400">Budget</span>Buddy
           </h1>
           <p className="text-xs text-gray-400 mt-0.5">{t("smart_money_tagline", "Smart money management")}</p>
         </div>
@@ -47,22 +48,24 @@ export default function Layout({ children, currentPageName }) {
                 key={item.page}
                 to={`/${item.page === 'Dashboard' ? '' : item.page.toLowerCase()}`}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                  isActive ? "bg-indigo-50 text-indigo-700" : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                  isActive 
+                    ? "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400" 
+                    : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white"
                 }`}
               >
-                <item.icon className={`w-5 h-5 ${isActive ? "text-indigo-600" : ""}`} />
+                <item.icon className={`w-5 h-5 ${isActive ? "text-indigo-600 dark:text-indigo-400" : ""}`} />
                 {t(item.label)} 
               </Link>
             );
           })}
         </nav>
         
-        {/* Desktop Bottom Actions: Toggle Language & Logout */}
-        <div className="mt-auto flex flex-col gap-2 pt-4 border-t border-gray-100">
+        {/* Desktop Bottom Actions */}
+        <div className="mt-auto flex flex-col gap-2 pt-4 border-t border-gray-100 dark:border-gray-700">
           <select 
             value={currency} 
             onChange={(e) => setCurrency(e.target.value)}
-            className="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-xl px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+            className="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-xl px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
           >
             <option value="EUR">🇪🇺 EUR (€)</option>
             <option value="USD">🇺🇸 USD ($)</option>
@@ -71,20 +74,20 @@ export default function Layout({ children, currentPageName }) {
             <option value="AUD">🇦🇺 AUD ($)</option>
             <option value="CAD">🇨🇦 CAD ($)</option>
           </select>
-          <Button variant="outline" size="sm" onClick={toggleLanguage} className="w-full justify-center">
+          <Button variant="outline" size="sm" onClick={toggleLanguage} className="w-full justify-center dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
             {i18n.language === 'en' ? '🇬🇷 ΕΛ' : '🇬🇧 EN'}
           </Button>
-          <Button variant="ghost" className="w-full justify-start text-gray-500 hover:text-red-500" onClick={handleLogout}>
+          <Button variant="ghost" className="w-full justify-start text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 dark:hover:bg-red-500/10" onClick={handleLogout}>
             <LogOut className="w-4 h-4 mr-2" />{t("logout_btn", "Sign Out")}
           </Button>
         </div>
       </aside>
 
       {/* Mobile Header */}
-      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between">
-        <h1 className="text-lg font-bold text-gray-900"><span className="text-indigo-600">Budget</span>Buddy</h1>
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 px-4 py-3 flex items-center justify-between transition-colors duration-200">
+        <h1 className="text-lg font-bold text-gray-900 dark:text-white"><span className="text-indigo-600 dark:text-indigo-400">Budget</span>Buddy</h1>
         
-        <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2">
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="p-2 text-gray-900 dark:text-white">
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
@@ -92,28 +95,46 @@ export default function Layout({ children, currentPageName }) {
       {/* Mobile Nav */}
       {mobileOpen && (
         <div className="md:hidden fixed inset-0 z-40">
-          <div className="absolute inset-0 bg-black/20" onClick={() => setMobileOpen(false)} />
-          <div className="absolute top-14 left-0 right-0 bg-white border-b border-gray-100 p-4 space-y-1 shadow-lg">
+          <div className="absolute inset-0 bg-black/20 dark:bg-black/50" onClick={() => setMobileOpen(false)} />
+          <div className="absolute top-14 left-0 right-0 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 p-4 space-y-1 shadow-lg transition-colors duration-200">
             {NAV_ITEMS.map((item) => {
               const isActive = currentPageName === item.page;
               return (
                 <Link key={item.page} to={`/${item.page === 'Dashboard' ? '' : item.page.toLowerCase()}`} onClick={() => setMobileOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                    isActive ? "bg-indigo-50 text-indigo-700" : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                    isActive 
+                      ? "bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400" 
+                      : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white"
                   }`}>
-                  <item.icon className={`w-5 h-5 ${isActive ? "text-indigo-600" : ""}`} />
+                  <item.icon className={`w-5 h-5 ${isActive ? "text-indigo-600 dark:text-indigo-400" : ""}`} />
                   {t(item.label)}
                 </Link>
               );
             })}
             
-            <div className="pt-2 mt-2 border-t border-gray-100 flex flex-col gap-2">
-              {/* Mobile Toggle Button */}
-              <Button variant="outline" className="w-full justify-center text-gray-700" onClick={() => { toggleLanguage(); setMobileOpen(false); }}>
+            <div className="pt-2 mt-2 border-t border-gray-100 dark:border-gray-700 flex flex-col gap-2">
+              {/* MOBILE CURRENCY SELECTOR ADDED HERE */}
+              <select 
+                value={currency} 
+                onChange={(e) => {
+                  setCurrency(e.target.value);
+                  setMobileOpen(false); // Close menu on select
+                }}
+                className="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-xl px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+              >
+                <option value="EUR">🇪🇺 EUR (€)</option>
+                <option value="USD">🇺🇸 USD ($)</option>
+                <option value="GBP">🇬🇧 GBP (£)</option>
+                <option value="JPY">🇯🇵 JPY (¥)</option>
+                <option value="AUD">🇦🇺 AUD ($)</option>
+                <option value="CAD">🇨🇦 CAD ($)</option>
+              </select>
+
+              <Button variant="outline" className="w-full justify-center text-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700" onClick={() => { toggleLanguage(); setMobileOpen(false); }}>
                  {i18n.language === 'en' ? '🇬🇷 Αλλαγή σε Ελληνικά' : '🇬🇧 Switch to English'}
               </Button>
               
-              <Button variant="ghost" className="w-full justify-start text-gray-500 hover:text-red-500 hover:bg-red-50" onClick={handleLogout}>
+              <Button variant="ghost" className="w-full justify-start text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10" onClick={handleLogout}>
                 <LogOut className="w-5 h-5 mr-3" />{t("logout_btn", "Sign Out")}
               </Button>
             </div>

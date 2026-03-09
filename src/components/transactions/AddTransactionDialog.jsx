@@ -14,7 +14,7 @@ const INCOME_CATEGORIES = ["salary","freelance","gifts","other_income"];
 const formatCategory = (cat) => cat?.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
 export default function AddTransactionDialog({ open, onOpenChange, onSubmit }) {
-  const { currency } = useCurrency(); // <-- ADDED THE HOOK HERE!
+  const { currency } = useCurrency();
   const [type, setType] = useState("expense");
   const [form, setForm] = useState({ title: "", amount: "", category: "", date: format(new Date(), "yyyy-MM-dd"), notes: "" });
   const [saving, setSaving] = useState(false);
@@ -32,46 +32,56 @@ export default function AddTransactionDialog({ open, onOpenChange, onSubmit }) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader><DialogTitle className="text-xl">Add Transaction</DialogTitle></DialogHeader>
+      {/* Notice the "!" modifiers here to force the background override */}
+      <DialogContent className="sm:max-w-md !bg-white dark:!bg-gray-900 !border-gray-200 dark:!border-gray-700 transition-colors">
+        <DialogHeader><DialogTitle className="text-xl text-gray-900 dark:text-white">Add Transaction</DialogTitle></DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-5 mt-2">
-          <div className="flex gap-2 p-1 bg-gray-100 rounded-xl">
+          
+          <div className="flex gap-2 p-1 bg-gray-100 dark:!bg-gray-800 rounded-xl transition-colors">
             {["expense","income"].map((t) => (
               <button key={t} type="button" onClick={() => { setType(t); setForm(f => ({ ...f, category: "" })); }}
-                className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all capitalize ${type === t ? "bg-white text-gray-900 shadow-sm" : "text-gray-500"}`}>
+                className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all capitalize ${
+                  type === t 
+                    ? "bg-white dark:!bg-gray-600 text-gray-900 dark:text-white shadow-sm" 
+                    : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                }`}>
                 {t}
               </button>
             ))}
           </div>
+
           <div className="space-y-2">
-            <Label>Title</Label>
-            <Input placeholder="e.g. Coffee, Rent, Paycheck" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
+            <Label className="text-gray-900 dark:text-gray-300">Title</Label>
+            <Input className="bg-white dark:!bg-gray-800 border-gray-200 dark:!border-gray-700 text-gray-900 dark:text-white dark:placeholder-gray-500" placeholder="e.g. Coffee, Rent, Paycheck" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
           </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              {/* Amount label dynamically shows current selected currency */}
-              <Label>Amount ({currency})</Label>
-              <Input type="number" step="0.01" min="0.01" placeholder="0.00" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} required />
+              <Label className="text-gray-900 dark:text-gray-300">Amount ({currency})</Label>
+              <Input className="bg-white dark:!bg-gray-800 border-gray-200 dark:!border-gray-700 text-gray-900 dark:text-white dark:placeholder-gray-500" type="number" step="0.01" min="0.01" placeholder="0.00" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })} required />
             </div>
             <div className="space-y-2">
-              <Label>Date</Label>
-              <Input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} required />
+              <Label className="text-gray-900 dark:text-gray-300">Date</Label>
+              <Input className="bg-white dark:!bg-gray-800 border-gray-200 dark:!border-gray-700 text-gray-900 dark:text-white" type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} required />
             </div>
           </div>
+
           <div className="space-y-2">
-            <Label>Category</Label>
+            <Label className="text-gray-900 dark:text-gray-300">Category</Label>
             <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })} required>
-              <SelectTrigger><SelectValue placeholder="Select a category" /></SelectTrigger>
-              <SelectContent>
-                {categories.map((c) => <SelectItem key={c} value={c}>{formatCategory(c)}</SelectItem>)}
+              <SelectTrigger className="bg-white dark:!bg-gray-800 border-gray-200 dark:!border-gray-700 text-gray-900 dark:text-white"><SelectValue placeholder="Select a category" /></SelectTrigger>
+              <SelectContent className="bg-white dark:!bg-gray-800 border-gray-200 dark:!border-gray-700">
+                {categories.map((c) => <SelectItem key={c} value={c} className="text-gray-900 dark:text-gray-200 focus:bg-gray-100 dark:focus:!bg-gray-700">{formatCategory(c)}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
+
           <div className="space-y-2">
-            <Label>Notes (optional)</Label>
-            <Textarea placeholder="Any extra details..." value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} rows={2} />
+            <Label className="text-gray-900 dark:text-gray-300">Notes (optional)</Label>
+            <Textarea className="bg-white dark:!bg-gray-800 border-gray-200 dark:!border-gray-700 text-gray-900 dark:text-white dark:placeholder-gray-500" placeholder="Any extra details..." value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} rows={2} />
           </div>
-          <Button type="submit" disabled={saving || !form.category} className="w-full bg-indigo-600 hover:bg-indigo-700 h-11 rounded-xl">
+
+          <Button type="submit" disabled={saving || !form.category} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white h-11 rounded-xl">
             {saving && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
             {saving ? "Saving..." : "Add Transaction"}
           </Button>

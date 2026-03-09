@@ -27,23 +27,25 @@ export default function SetBudgetDialog({ open, onOpenChange, onSubmit, existing
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-sm">
-        <DialogHeader><DialogTitle className="text-xl">Set Budget Limit</DialogTitle></DialogHeader>
+      <DialogContent className="sm:max-w-sm !bg-white dark:!bg-gray-900 !border-gray-200 dark:!border-gray-700 transition-colors">
+        <DialogHeader><DialogTitle className="text-xl text-gray-900 dark:text-white">Set Budget Limit</DialogTitle></DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-5 mt-2">
           <div className="space-y-2">
-            <Label>Category</Label>
+            <Label className="text-gray-900 dark:text-gray-300">Category</Label>
             <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
-              <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
-              <SelectContent>
-                {available.map((c) => <SelectItem key={c} value={c}>{formatCategory(c)}</SelectItem>)}
+              <SelectTrigger className="bg-white dark:!bg-gray-800 border-gray-200 dark:!border-gray-700 text-gray-900 dark:text-white">
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent className="bg-white dark:!bg-gray-800 border-gray-200 dark:!border-gray-700">
+                {available.map((c) => <SelectItem key={c} value={c} className="text-gray-900 dark:text-gray-200 focus:bg-gray-100 dark:focus:!bg-gray-700">{formatCategory(c)}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2">
-            <Label>Monthly Limit ({currency})</Label>
-            <Input type="number" step="1" min="1" placeholder="e.g. 200" value={form.monthly_limit} onChange={(e) => setForm({ ...form, monthly_limit: e.target.value })} required />
+            <Label className="text-gray-900 dark:text-gray-300">Monthly Limit ({currency})</Label>
+            <Input className="bg-white dark:!bg-gray-800 border-gray-200 dark:!border-gray-700 text-gray-900 dark:text-white" type="number" step="1" min="1" placeholder="e.g. 200" value={form.monthly_limit} onChange={(e) => setForm({ ...form, monthly_limit: e.target.value })} required />
           </div>
-          <Button type="submit" disabled={saving || !form.category} className="w-full bg-indigo-600 hover:bg-indigo-700 h-11 rounded-xl">
+          <Button type="submit" disabled={saving || !form.category} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white h-11 rounded-xl">
             {saving && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
             {saving ? "Saving..." : "Set Budget"}
           </Button>

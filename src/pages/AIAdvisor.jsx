@@ -97,7 +97,7 @@ export default function AIAdvisor() {
 
   // Main page layout
   return (
-    <div className="min-h-screen bg-gray-50/50">
+    <div className="min-h-screen bg-gray-50/50 dark:bg-gray-900 transition-colors duration-200">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 flex flex-col" style={{ height: "calc(100vh - 80px)" }}>
         <div className="mb-6">
           <div className="flex items-center gap-3 mb-2">
@@ -105,8 +105,8 @@ export default function AIAdvisor() {
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">{t("ai_advisor_title", "AI Money Advisor")}</h1>
-              <p className="text-sm text-gray-500">{t("ai_advisor_subtitle", "Ask anything about your finances")}</p>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">{t("ai_advisor_title", "AI Money Advisor")}</h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{t("ai_advisor_subtitle", "Ask anything about your finances")}</p>
             </div>
           </div>
         </div>
@@ -115,17 +115,17 @@ export default function AIAdvisor() {
         <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-1">
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full text-center gap-6">
-              <div className="p-4 bg-indigo-50 rounded-2xl"><Bot className="w-10 h-10 text-indigo-500" /></div>
+              <div className="p-4 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl"><Bot className="w-10 h-10 text-indigo-500 dark:text-indigo-400" /></div>
               <div>
-                <p className="text-gray-900 font-medium mb-1">{t("ai_greeting", "Hi! I'm your AI Money Advisor")}</p>
-                <p className="text-sm text-gray-500 max-w-sm">{t("ai_description", "I can analyze your spending, help you budget, and give personalized tips.")}</p>
+                <p className="text-gray-900 dark:text-white font-medium mb-1">{t("ai_greeting", "Hi! I'm your AI Money Advisor")}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 max-w-sm">{t("ai_description", "I can analyze your spending, help you budget, and give personalized tips.")}</p>
               </div>
 
               {/* Quick prompt buttons for user to get started */}
               <div className="flex flex-wrap justify-center gap-2">
                 {quickPrompts.map((prompt) => (
                   <button key={prompt} onClick={() => setInput(prompt)}
-                    className="text-sm px-4 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700 transition-all">
+                    className="text-sm px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 hover:border-indigo-200 dark:hover:border-indigo-500/30 hover:text-indigo-700 dark:hover:text-indigo-400 transition-all">
                     {prompt}
                   </button>
                 ))}
@@ -142,11 +142,11 @@ export default function AIAdvisor() {
                 className={`flex gap-3 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 {msg.role === "assistant" && (
-                  <div className="w-8 h-8 rounded-xl bg-indigo-100 flex items-center justify-center shrink-0 mt-1">
-                    <Sparkles className="w-4 h-4 text-indigo-600" />
+                  <div className="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center shrink-0 mt-1">
+                    <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                   </div>
                 )}
-                <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${msg.role === "user" ? "bg-indigo-600 text-white" : "bg-white border border-gray-100 shadow-sm"}`}>
+                <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${msg.role === "user" ? "bg-indigo-600 text-white" : "bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm text-gray-900 dark:text-gray-200"}`}>
                   {msg.role === "user" ? (
                     <p className="text-sm">{msg.content}</p>
                   ) : (
@@ -156,8 +156,8 @@ export default function AIAdvisor() {
                   )}
                 </div>
                 {msg.role === "user" && (
-                  <div className="w-8 h-8 rounded-xl bg-gray-200 flex items-center justify-center shrink-0 mt-1">
-                    <User className="w-4 h-4 text-gray-600" />
+                  <div className="w-8 h-8 rounded-xl bg-gray-200 dark:bg-gray-700 flex items-center justify-center shrink-0 mt-1">
+                    <User className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                   </div>
                 )}
               </motion.div>
@@ -171,14 +171,14 @@ export default function AIAdvisor() {
               className="flex gap-3 items-start"
             >
               
-              <div className="w-8 h-8 rounded-xl bg-indigo-100 flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-indigo-600" />
+              <div className="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-500/20 flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <div className="bg-white border border-gray-100 rounded-2xl px-4 py-3 shadow-sm">
+              <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl px-4 py-3 shadow-sm">
                 <div className="flex gap-1.5">
-                  <div className="w-2 h-2 bg-indigo-300 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                  <div className="w-2 h-2 bg-indigo-300 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                  <div className="w-2 h-2 bg-indigo-300 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                  <div className="w-2 h-2 bg-indigo-300 dark:bg-indigo-500/50 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <div className="w-2 h-2 bg-indigo-300 dark:bg-indigo-500/50 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                  <div className="w-2 h-2 bg-indigo-300 dark:bg-indigo-500/50 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
                 </div>
               </div>
             </motion.div>
@@ -189,8 +189,8 @@ export default function AIAdvisor() {
           <Input value={input} onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && !loading && handleSend()}
             placeholder={t("ai_input_placeholder", "Ask about your spending, budget tips, savings goals...")}
-            className="flex-1 h-12 rounded-xl" disabled={loading} />
-          <Button onClick={handleSend} disabled={loading || !input.trim()} className="bg-indigo-600 hover:bg-indigo-700 rounded-xl h-12 w-12">
+            className="flex-1 h-12 rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:placeholder-gray-500" disabled={loading} />
+          <Button onClick={handleSend} disabled={loading || !input.trim()} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl h-12 w-12">
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
           </Button>
         </div>

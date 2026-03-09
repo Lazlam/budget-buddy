@@ -6,6 +6,7 @@ import './i18n';
 import App from "./App";
 import "./index.css"; 
 import { CurrencyProvider } from "./contexts/CurrencyContext";
+import { ThemeProvider } from '@/contexts/ThemeContext';
 
 const queryClient = new QueryClient();
 
@@ -14,9 +15,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
       
       <CurrencyProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <ThemeProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ThemeProvider>
       </CurrencyProvider>
     </QueryClientProvider>
   </React.StrictMode>
